@@ -203,6 +203,23 @@ if (head_read(&parent_id) == 0) {
 }
 const char *author = pes_author();
 uint64_t timestamp = (uint64_t)time(NULL);
+void *data = NULL;
+size_t len = 0;
+
+if (commit_serialize(&tree_id,
+                     has_parent ? &parent_id : NULL,
+                     author,
+                     timestamp,
+                     message,
+                     &data,
+                     &len) != 0)
+    return -1;
+if (object_write(OBJ_COMMIT, data, len, id_out) != 0) {
+    free(data);
+    return -1;
+}
+
+free(data);
 
 if (tree_from_index(&tree_id) != 0)
     return -1;
