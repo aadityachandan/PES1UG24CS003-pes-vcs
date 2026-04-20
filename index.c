@@ -199,8 +199,42 @@ return 0;
 //
 // Returns 0 on success, -1 on error.
 int index_add(Index *index, const char *path) {
-    // TODO: Implement file staging
-    // (See Lab Appendix for logical steps)
-    (void)index; (void)path;
-    return -1;
+int index_add(Index *index, const char *path) {
+    FILE *f = fopen(path, "rb");
+    if (!f) return -1;
+
+    fseek(f, 0, SEEK_END);
+    size_t size = ftell(f);
+    rewind(f);
+
+    void *buf = malloc(size);
+    if (!buf) {
+        fclose(f);
+        return -1;
+    }
+
+    fread(buf, 1, size, f);
+    fclose(f);
+
+    ObjectID blob_id;
+    if (object_write(OBJ_BLOB, buf, size, &blob_id) != 0) {
+        free(buf);
+        return -1;
+    }
+
+    free(buf);
+
+    IndexEntry entry;
+
+    entry.mode = get_file_mode(path);
+    entry.hash = blob_id;
+    entry.size = size;
+    entry.mtime = time(NULL);
+
+    strncpy(entry.path, path, sizeof(entry.path) - 1);
+    entry.path[sizeof(entry.path) - 1] = '\0';
+
+    index->entries[index->count++] = entry;
+
+    return index_save(index);
 }
