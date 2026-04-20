@@ -143,4 +143,14 @@ int tree_from_index(ObjectID *id_out) {
 
     te->mode = e->mode;
     te->hash = e->hash;
-    }
+
+    const char *slash = strrchr(e->path, '/');
+
+    if (slash)
+        strncpy(te->name, slash + 1, sizeof(te->name) - 1);
+    else
+        strncpy(te->name, e->path, sizeof(te->name) - 1);
+
+    te->name[sizeof(te->name) - 1] = '\0';
+}
+}
