@@ -7,7 +7,6 @@
 //
 // PROVIDED functions: compute_hash, object_path, object_exists, hash_to_hex, hex_to_hash
 // TODO functions:     object_write, object_read
-
 #include "pes.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -81,7 +80,8 @@ int object_exists(const ObjectID *id) {
 //   9. Store the computed hash in *id_out
 
 // HINTS - Useful syscalls and functions for this phase:
-//   - sprintf / snprintf : formatting the header string//   - compute_hash       : hashing the combined header + data
+//   - sprintf / snprintf : formatting the header string
+//   - compute_hash       : hashing the combined header + data
 //   - object_exists      : checking for deduplication
 //   - mkdir              : creating the shard directory (use mode 0755)
 //   - open, write, close : creating and writing to the temp file
@@ -112,6 +112,9 @@ int object_write(ObjectType type, const void *data, size_t len, ObjectID *id_out
         free(full_obj);
         return 0;
     }
+    
+    //hashing
+    
 
     // 4. Create shard directory (.pes/objects/XX/) if it doesn't exist
     char path[512];
