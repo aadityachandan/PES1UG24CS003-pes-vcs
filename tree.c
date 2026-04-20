@@ -129,6 +129,7 @@ int tree_serialize(const Tree *tree, void **data_out, size_t *len_out) {
 //   - object_write    : save that binary buffer to the store as OBJ_TREE
 //
 // Returns 0 on success, -1 on error.
+
 int tree_from_index(ObjectID *id_out) {
     Index idx;
 
@@ -136,26 +137,36 @@ int tree_from_index(ObjectID *id_out) {
 
     Tree tree;
     tree.count = 0;
+
     for (int i = 0; i < idx.count; i++) {
-    IndexEntry *e = &idx.entries[i];
+        IndexEntry *e = &idx.entries[i];
 
-    TreeEntry *te = &tree.entries[tree.count++];
+        TreeEntry *te = &tree.entries[tree.count++];
 
-    te->mode = e->mode;
-    te->hash = e->hash;
+        te->mode = e->mode;
+        te->hash = e->hash;
 
-    const char *slash = strrchr(e->path, '/');
+        const char *slash = strrchr(e->path, '/');
 
-    if (slash)
-        strncpy(te->name, slash + 1, sizeof(te->name) - 1);
-    else
-        strncpy(te->name, e->path, sizeof(te->name) - 1);
+        if (slash)
+            strncpy(te->name, slash + 1, sizeof(te->name) - 1);
+        else
+            strncpy(te->name, e->path, sizeof(te->name) - 1);
 
-    te->name[sizeof(te->name) - 1] = '\0';
-}
-void *data = NULL;
-size_t len = 0;
+        te->name[sizeof(te->name) - 1] = '\0';
+    }
 
-if (tree_serialize(&tree, &data, &len) != 0)
-    return -1;
+    void *data = NULL;
+    size_t len = 0;
+
+    if (tree_serialize(&tree, &data, &len) != 0)
+        return -1;
+
+    if (object_write(OBJ_TREE, data, len, id_out) != 0) {
+        free(data);
+        return -1;
+    }
+
+    free(data);
+    return 0;
 }
