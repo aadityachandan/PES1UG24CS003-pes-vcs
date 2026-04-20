@@ -201,6 +201,8 @@ int has_parent = 0;
 if (head_read(&parent_id) == 0) {
     has_parent = 1;
 }
+const char *author = pes_author();
+uint64_t timestamp = (uint64_t)time(NULL);
 
 if (tree_from_index(&tree_id) != 0)
     return -1;
