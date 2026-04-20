@@ -144,6 +144,17 @@ if (!f) return 0;   // empty index is valid
     (void)index;
     return -1;
 }
+while (fscanf(f, "%o %64s %llu %u %511s\n",
+              &index->entries[index->count].mode,
+              index->entries[index->count].hash.hex,
+              &index->entries[index->count].mtime,
+              &index->entries[index->count].size,
+              index->entries[index->count].path) == 5) {
+
+    index->count++;
+}
+fclose(f);
+return 0;
 
 // Save the index to .pes/index atomically.
 //
