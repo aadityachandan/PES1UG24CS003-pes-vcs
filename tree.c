@@ -153,4 +153,9 @@ int tree_from_index(ObjectID *id_out) {
 
     te->name[sizeof(te->name) - 1] = '\0';
 }
+void *data = NULL;
+size_t len = 0;
+
+if (tree_serialize(&tree, &data, &len) != 0)
+    return -1;
 }
