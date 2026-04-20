@@ -14,7 +14,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
 #include <dirent.h>
 #include <sys/stat.h>
 
@@ -174,4 +173,3 @@ int tree_from_index(ObjectID *id_out) {
     free(data);
     return 0;
 }
-

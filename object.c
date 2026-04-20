@@ -112,9 +112,6 @@ int object_write(ObjectType type, const void *data, size_t len, ObjectID *id_out
         free(full_obj);
         return 0;
     }
-    
-    //hashing
-    
 
     // 4. Create shard directory (.pes/objects/XX/) if it doesn't exist
     char path[512];
@@ -250,4 +247,3 @@ int object_read(const ObjectID *id, ObjectType *type_out, void **data_out, size_
     free(full_data);
     return 0;
 }
-

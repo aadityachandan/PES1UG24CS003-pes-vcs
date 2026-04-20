@@ -245,4 +245,3 @@ int index_add(Index *index, const char *path) {
     // Step 5: Persist the updated staging area atomically
     return index_save(index);
 }
-
