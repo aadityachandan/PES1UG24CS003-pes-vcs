@@ -81,8 +81,7 @@ int object_exists(const ObjectID *id) {
 //   9. Store the computed hash in *id_out
 
 // HINTS - Useful syscalls and functions for this phase:
-//   - sprintf / snprintf : formatting the header string
-//   - compute_hash       : hashing the combined header + data
+//   - sprintf / snprintf : formatting the header string//   - compute_hash       : hashing the combined header + data
 //   - object_exists      : checking for deduplication
 //   - mkdir              : creating the shard directory (use mode 0755)
 //   - open, write, close : creating and writing to the temp file
@@ -94,7 +93,12 @@ int object_exists(const ObjectID *id) {
 //
 // Returns 0 on success, -1 on error.
 int object_write(ObjectType type, const void *data, size_t len, ObjectID *id_out) {
-    // TODO: Implement
+    /const char *type_str =
+    (type == OBJ_BLOB) ? "blob" :
+    (type == OBJ_TREE) ? "tree" : "commit";
+
+char header[64];
+int header_len = sprintf(header, "%s %zu", type_str, len) + 1;
     (void)type; (void)data; (void)len; (void)id_out;
     return -1;
 }
