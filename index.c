@@ -167,6 +167,22 @@ return 0;
 //
 // Returns 0 on success, -1 on error.
 int index_save(const Index *index) {
+FILE *f = fopen(INDEX_FILE, "w");
+if (!f) return -1;
+
+for (int i = 0; i < index->count; i++) {
+    const IndexEntry *e = &index->entries[i];
+
+    fprintf(f, "%o %s %llu %u %s\n",
+            e->mode,
+            e->hash.hex,
+            (unsigned long long)e->mtime,
+            e->size,
+            e->path);
+}
+
+fclose(f);
+return 0;
     // TODO: Implement atomic index saving
     // (See Lab Appendix for logical steps)
     (void)index;
