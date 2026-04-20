@@ -142,10 +142,10 @@ tmp_path[sizeof(tmp_path) - 1] = '\0';
     // 6. fsync and rename for atomic persistence
     fsync(fd);
     close(fd);
-    //if (rename(tmp_path, path) != 0) {
-    //    free(full_obj);
-     //   return -1;
-    //}
+     (rename(tmp_path, path) != 0) {
+        free(full_obj);
+        return -1;
+    }
 
     free(full_obj);
     return 0;
